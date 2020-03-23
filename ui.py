@@ -27,19 +27,26 @@ class UIMainWindow(object):
         self.btn_append_clear = QtWidgets.QPushButton(self.central_widget)
         self.btn_append_clear.setText("Append and Clear")
         self.btn_append_clear.setMaximumWidth(180)
+        self.btn_copy_clear = QtWidgets.QPushButton(self.central_widget)
+        self.btn_copy_clear.setText("Copy and Clear")
+        self.btn_copy_clear.setMaximumWidth(180)
 
-        self.horizon_layout_btn = QtWidgets.QHBoxLayout()
-        self.horizon_layout_btn.addWidget(self.btn_append_clear)
+        self.horizon_layout_btn1 = QtWidgets.QHBoxLayout()
+        self.horizon_layout_btn1.addWidget(self.btn_append_clear)
+        self.horizon_layout_btn2 = QtWidgets.QHBoxLayout()
+        self.horizon_layout_btn2.addWidget(self.btn_copy_clear)
 
         self.grid_layout = QtWidgets.QGridLayout(self.central_widget)
         self.grid_layout.addWidget(self.text_input, 0, 0, 1, 1)
         self.grid_layout.addWidget(self.text_temp, 1, 0, 1, 1)
-        self.grid_layout.addLayout(self.horizon_layout_btn, 2, 0, 1, 1)
-        self.grid_layout.addWidget(self.text_output, 0, 1, 3, 1)
+        self.grid_layout.addLayout(self.horizon_layout_btn1, 2, 0, 1, 1)
+        self.grid_layout.addWidget(self.text_output, 0, 1, 2, 1)
+        self.grid_layout.addLayout(self.horizon_layout_btn2, 2, 1, 1, 1)
         
         self.window.setCentralWidget(self.central_widget)
         
         self._set_connect()
+        
 
     def _init_shortcut(self):
         copy_action = QtWidgets.QAction(self.window)
@@ -85,6 +92,7 @@ class UIMainWindow(object):
     def _set_connect(self):
         self.text_input.textChanged.connect(self._handle_input)
         self.btn_append_clear.clicked.connect(self._append_clear)
+        self.btn_copy_clear.clicked.connect(self._copy_clear)
 
 
     def _handle_input(self):
@@ -97,7 +105,13 @@ class UIMainWindow(object):
     def _append_clear(self):
         text = self.text_temp.toPlainText()
         self.text_output.append(text)
+        self.text_output.setFocus()
         self.text_input.clear()
+
+
+    def _copy_clear(self):
+        self._copy_text()
+        self.text_output.clear()
 
 
 
